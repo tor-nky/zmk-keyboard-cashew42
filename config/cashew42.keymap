@@ -1,0 +1,157 @@
+/*
+ * Copyright (c) 2026 Satoru NAKAYA
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/pointing.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/outputs.h>
+#include <behaviors/naginata.dtsi>
+#include <layout_shift_kp_override.dtsi>
+
+&lt { quick-tap-ms = <200>; };
+&mt { quick-tap-ms = <200>; };
+
+/ {
+    aliases {
+        led-red = &led0;
+        led-green = &led1;
+        led-blue = &led2;
+    };
+
+    leds {
+        status = "okay";
+    };
+
+    macros {
+        ng_on: ng_on {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&macro_tap &kp LANGUAGE_1 &to 1>
+                ;
+        };
+        ng_off: ng_off {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&macro_tap &kp LANGUAGE_2 &to 0>
+                ;
+        };
+        base_with_mod: base_with_mod {
+            compatible = "zmk,behavior-macro-one-param";
+            wait-ms = <0>;
+            tap-ms = <0>;
+            #binding-cells = <1>;
+            bindings
+                = <&macro_press &tog 1 >
+                , <&macro_param_1to1>
+                , <&macro_press &kp MACRO_PLACEHOLDER>
+                , <&macro_pause_for_release>
+                , <&macro_param_1to1>
+                , <&macro_release &kp MACRO_PLACEHOLDER>
+                , <&macro_press &tog 1 >
+                ;
+        };
+    };
+
+    combos {
+        compatible = "zmk,combos";
+        combo_ng_on {
+            timeout-ms = <300>;
+            key-positions = <18 19>; // H, Jのキー位置に書き換えてください
+            bindings = <&ng_on>;
+            layers = <0>; // デフォルトレイヤーが0の前提
+        };
+        combo_ng_off {
+            timeout-ms = <300>;
+            key-positions = <16 17>; // F, Gのキー位置に書き換えてください
+            bindings = <&ng_off>;
+            layers = <0 1>; // デフォルトレイヤーが0、薙刀式レイヤーが1の前提
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_layer { // layer 0
+            display-name = "Default Layer";
+// -----------------------------------------------------------------------------------------
+// |OP_ESC |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U  |  I  |  O  |  P  |   -   |
+// |CTL_TAB|  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  ;  |   '   |
+// |  SHFT |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M  |  ,  |  .  |  /  |SFT_DEL|
+//                  |CM_EISU|LOW_BS| SPC |   | SPC |RAI_ENT|OP_KANA|
+            bindings = <
+&mt LALT ESC  &kp Q &kp W &kp E &kp R &kp T   &kp Y &kp U  &kp I     &kp O   &kp P    &kp MINUS
+&mt LCTRL TAB &kp A &kp S &kp D &kp F &kp G   &kp H &kp J  &kp K     &kp L   &kp SEMI &kp SQT
+&kp LSHFT     &kp Z &kp X &kp C &kp V &kp B   &kp N &kp M  &kp COMMA &kp DOT &kp FSLH &mt RSHFT DEL
+        &kp LGUI &lt 2 BSPC &mt LSHFT SPACE   &mt RSHFT SPACE &lt 3 RET &kp LALT
+            >;
+        };
+
+// 薙刀式に必要な31キー(Enterもシフトキーにしたいときは32キー)を定義してください。
+// &kpの代わりに&ngを使います。通常はデフォルトレイヤーの次に配置してください(レイヤー番号1)。
+        naginata_layer { // layer 1 
+            display-name = "Naginata Layer";
+// -----------------------------------------------------------------------------------------
+// |       |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U  |  I  |  O  |  P  |       |
+// |       |  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  ;  |       |
+// |       |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M  |  ,  |  .  |  /  |       |
+//                     |     |     | SPC |   | SPC |     |     |
+            bindings = <
+&kp ESC              &ng Q &ng W &ng E &ng R &ng T   &ng Y &ng U  &ng I     &ng O   &ng P    &trans
+&base_with_mod LCTRL &ng A &ng S &ng D &ng F &ng G   &ng H &ng J  &ng K     &ng L   &ng SEMI &trans
+&base_with_mod LSHFT &ng Z &ng X &ng C &ng V &ng B   &ng N &ng M  &ng COMMA &ng DOT &ng FSLH &base_with_mod RSHFT
+              &base_with_mod LGUI &trans &ng SPACE   &ng SPACE &trans &base_with_mod LALT
+            >;
+        };
+
+        lower_layer {   // layer 2
+            display-name = "Lower Layer";
+// -----------------------------------------------------------------------------------------
+// |   `   |  ^  |  ]  |  &  |  [  |  \  |   |  :  |  7  |  8  |  9  |  /  |   -   |
+// |       |  !  |  @  | "|" |  (  |  )  |   |  =  |  4  |  5  |  6  |  +  |   *   |
+// |       |  ~  |  $  |  #  |  {  |  }  |   |  0  |  1  |  2  |  3  |  .  |   %   |
+//                     |     |     |     |   |     |ADJ_ENT|   |
+            bindings = <
+&kp GRAVE &kp CARET &kp RBKT &kp AMPS &kp LBKT &kp BSLH   &kp COLON &kp N7 &kp N8 &kp N9 &kp KP_DIVIDE &kp KP_MINUS
+&trans    &kp EXCL  &kp AT   &kp PIPE &kp LPAR &kp RPAR   &kp EQUAL &kp N4 &kp N5 &kp N6 &kp KP_PLUS   &kp KP_MULTIPLY
+&trans    &kp TILDE &kp DLLR &kp HASH &kp LBRC &kp RBRC   &kp N0    &kp N1 &kp N2 &kp N3 &kp KP_DOT    &kp PRCNT
+                             &trans   &trans   &trans     &trans    &lt 4 KP_ENTER &trans
+            >;
+        };
+
+        raise_layer {   // layer 3
+            display-name = "Raise Layer";
+// -----------------------------------------------------------------------------------------
+// |  PWR  |  F1 |  F2 |  F3 |  F4 |  F5 |   |     |     |     |     | LCLK|  RCLK |
+// |       |  F6 |  F7 |  F8 |  F9 | F10 |   | LFT | DWN |  UP | RGT | MCLK|       |
+// |  SHFT | F11 | F12 | PSCR| SCRL| PAUS|   | HOME| PGWN| PGUP| END |     |       |
+//                    |     |ADJUST|     |   |     |     |     |
+            bindings = <
+&kp K_PWR &kp F1  &kp F2  &kp F3    &kp F4   &kp F5            &trans   &trans    &trans    &trans    &mkp MB1 &mkp MB2
+&trans    &kp F6  &kp F7  &kp F8    &kp F9   &kp F10           &kp LEFT &kp DOWN  &kp UP    &kp RIGHT &mkp MB3 &trans
+&kp LSHFT &kp F11 &kp F12 &kp PSCRN &kp SLCK &kp PAUSE_BREAK   &kp HOME &kp PG_DN &kp PG_UP &kp END   &trans   &kp RSHFT
+                          &trans    &mo 4    &trans            &trans   &trans    &trans
+            >;
+        };
+
+        adjust_layer {  // layer 4
+            display-name = "Adjust Layer";
+// -----------------------------------------------------------------------------------------
+// | RESET |       |       |  PREV | PLAY | NEXT |   |       | Unlock|       |       | US2JIS|       |
+// |       |NG_WIN |NG_MAC |NG_LNX |VOL_UP|BRI_UP|   |OUT_BLE|OUT_USB| BT_CLR|       | US_KEY|       |
+// |       |NG_TATE|NG_YOKO|       |VOL_DN|BRI_DN|   |BT_SEL0|BT_SEL1|BT_SEL2|BT_SEL3|BT_SEL4|  SHFT |
+//                         |       |      |      |   |       |       |       |
+            bindings = <
+&bootloader &none   &none   &kp C_PREV &kp C_PP     &kp C_NEXT     &none        &studio_unlock &none        &none        &tog_ls_on   &none
+&none       &ng F15 &ng F16 &ng F17    &kp C_VOL_UP &kp C_BRI_UP   &out OUT_BLE &out OUT_USB   &bt BT_CLR   &none        &tog_ls_off  &none
+&none       &ng F18 &ng F19 &none      &kp C_VOL_DN &kp C_BRI_DN   &bt BT_SEL 0 &bt BT_SEL 1   &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4 &kp RSHFT
+                            &none      &trans       &none          &none        &trans         &none
+            >;
+        };
+    };
+};

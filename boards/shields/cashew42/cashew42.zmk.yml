@@ -1,0 +1,12 @@
+file_format: "1"
+id: cashew42
+name: cashew42
+type: shield
+url: https://github.com/tor-nky/cashew42
+requires: [xiao_ble]
+features:
+  - keys
+  - studio
+siblings:
+  - cashew42_left
+  - cashew42_right

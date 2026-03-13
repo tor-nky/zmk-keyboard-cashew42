@@ -1,0 +1,15 @@
+/*
+ * Copyright (c) 2026 Satoru NAKAYA
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#include "cashew42.dtsi"
+
+&default_transform {
+    row-offset = <4>;
+};
+
+&five_column_transform {
+    row-offset = <4>;
+};

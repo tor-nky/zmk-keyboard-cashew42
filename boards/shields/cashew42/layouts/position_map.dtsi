@@ -1,0 +1,7 @@
+/ {
+    layouts_cashew42_position_map: layouts_cashew42_position_map {
+        compatible = "zmk,physical-layout-position-map";
+
+        complete;
+    };
+};
