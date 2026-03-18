@@ -41,7 +41,7 @@
                 = <&macro_tap &kp LANGUAGE_2 &to 0>
                 ;
         };
-        base_with_mod: base_with_mod {
+        ng_mod: ng_mod {
             compatible = "zmk,behavior-macro-one-param";
             wait-ms = <0>;
             tap-ms = <0>;
@@ -53,6 +53,51 @@
                 , <&macro_pause_for_release>
                 , <&macro_param_1to1>
                 , <&macro_release &kp MACRO_PLACEHOLDER>
+                , <&macro_press &tog 1 >
+                ;
+        };
+        ng_mt_sft: ng_mt_sft {
+            compatible = "zmk,behavior-macro-one-param";
+            wait-ms = <0>;
+            tap-ms = <0>;
+            #binding-cells = <1>;
+            bindings
+                = <&macro_press &tog 1 >
+                , <&macro_param_1to2>
+                , <&macro_press &mt RSHFT MACRO_PLACEHOLDER>
+                , <&macro_pause_for_release>
+                , <&macro_param_1to2>
+                , <&macro_release &mt RSHFT MACRO_PLACEHOLDER>
+                , <&macro_press &tog 1 >
+                ;
+        };
+        ng_mt_ctl: ng_mt_ctl {
+            compatible = "zmk,behavior-macro-one-param";
+            wait-ms = <0>;
+            tap-ms = <0>;
+            #binding-cells = <1>;
+            bindings
+                = <&macro_press &tog 1 >
+                , <&macro_param_1to2>
+                , <&macro_press &mt LCTRL MACRO_PLACEHOLDER>
+                , <&macro_pause_for_release>
+                , <&macro_param_1to2>
+                , <&macro_release &mt LCTRL MACRO_PLACEHOLDER>
+                , <&macro_press &tog 1 >
+                ;
+        };
+        ng_mt_alt: ng_mt_alt {
+            compatible = "zmk,behavior-macro-one-param";
+            wait-ms = <0>;
+            tap-ms = <0>;
+            #binding-cells = <1>;
+            bindings
+                = <&macro_press &tog 1 >
+                , <&macro_param_1to2>
+                , <&macro_press &mt LALT MACRO_PLACEHOLDER>
+                , <&macro_pause_for_release>
+                , <&macro_param_1to2>
+                , <&macro_release &mt LALT MACRO_PLACEHOLDER>
                 , <&macro_press &tog 1 >
                 ;
         };
@@ -102,10 +147,10 @@
 // |       |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M  |  ,  |  .  |  /  |       |
 //                     |     |     | SPC |   | SPC |     |     |
             bindings = <
-&kp ESC              &ng Q &ng W &ng E &ng R &ng T   &ng Y &ng U  &ng I     &ng O   &ng P    &trans
-&base_with_mod LCTRL &ng A &ng S &ng D &ng F &ng G   &ng H &ng J  &ng K     &ng L   &ng SEMI &trans
-&base_with_mod LSHFT &ng Z &ng X &ng C &ng V &ng B   &ng N &ng M  &ng COMMA &ng DOT &ng FSLH &base_with_mod RSHFT
-              &base_with_mod LGUI &trans &ng SPACE   &ng SPACE &trans &base_with_mod LALT
+&ng_mt_alt ESC &ng Q &ng W &ng E &ng R &ng T   &ng Y &ng U  &ng I     &ng O   &ng P    &trans
+&ng_mt_ctl TAB &ng A &ng S &ng D &ng F &ng G   &ng H &ng J  &ng K     &ng L   &ng SEMI &trans
+&ng_mod LSHFT  &ng Z &ng X &ng C &ng V &ng B   &ng N &ng M  &ng COMMA &ng DOT &ng FSLH &ng_mt_sft DEL
+               &ng_mod LGUI &trans &ng SPACE   &ng SPACE &trans &ng_mod LALT
             >;
         };
 
