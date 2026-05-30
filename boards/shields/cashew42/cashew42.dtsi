@@ -21,6 +21,7 @@
     chosen {
         zmk,kscan = &kscan0;
         zmk,physical-layout = &cashew42_6col_layout;
+        zmk,underglow = &led_strip;
     };
 
     default_transform: keymap_transform_0 {
@@ -70,6 +71,5 @@
     // TODO: per-key RGB node(s)?
 };
 
-&xiao_spi { status = "disabled"; };
 &xiao_i2c { status = "disabled"; };
 &xiao_serial { status = "disabled"; };
