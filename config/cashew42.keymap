@@ -13,7 +13,10 @@
 #include <behaviors/naginata.dtsi>
 #include <layout_shift_kp_override.dtsi>
 
-&lt { quick-tap-ms = <200>; };
+&lt {
+    flavor = "hold-preferred";
+    quick-tap-ms = <200>;
+};
 &mt { quick-tap-ms = <200>; };
 
 / {
