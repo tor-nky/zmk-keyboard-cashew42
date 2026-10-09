@@ -57,14 +57,14 @@
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             bindings
-                = <&macro_tap &kp LANGUAGE_1 &tog_on 1>
+                = <&macro_tap &kp LANGUAGE_1 &tog_on 1 &tog_off 2>
                 ;
         };
         ng_off: ng_off {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
             bindings
-                = <&macro_tap &ng OUT &kp LANGUAGE_2 &tog_off 1>
+                = <&macro_tap &ng OUT &kp LANGUAGE_2 &tog_off 1 &tog_off 2>
                 ;
         };
         ng_mod: ng_mod {
@@ -135,17 +135,23 @@
 
     combos {
         compatible = "zmk,combos";
+        combo_tog_numpad {
+            timeout-ms = <300>;
+            key-positions = <40 41>;
+            bindings = <&tog_numpad>;
+            layers = <0 1 2>;
+        };
         combo_ng_on {
             timeout-ms = <300>;
             key-positions = <18 19>; // H, Jのキー位置に書き換えてください
             bindings = <&ng_on>;
-            layers = <0>; // デフォルトレイヤーが0の前提
+            layers = <0 2>; // デフォルトレイヤーが0の前提
         };
         combo_ng_off {
             timeout-ms = <300>;
             key-positions = <16 17>; // F, Gのキー位置に書き換えてください
             bindings = <&ng_off>;
-            layers = <0 1>; // デフォルトレイヤーが0、薙刀式レイヤーが1の前提
+            layers = <0 1 2>; // デフォルトレイヤーが0、薙刀式レイヤーが1の前提
         };
     };
 
@@ -222,10 +228,10 @@
 // |  SHFT | F11 | F12 | PSCR| SCRL| PAUS|   | HOME| PGWN| PGUP| END |     |       |
 //                    |     |ADJUST|     |   |     |     |     |
             bindings = <
-&kp K_PWR &kp F1  &kp F2  &kp F3    &kp F4   &kp F5            &trans   &tog_numpad &trans    &trans    &mkp MB1 &mkp MB2
-&trans    &kp F6  &kp F7  &kp F8    &kp F9   &kp F10           &kp LEFT &kp DOWN    &kp UP    &kp RIGHT &mkp MB3 &trans
-&kp LSHFT &kp F11 &kp F12 &kp PSCRN &kp SLCK &kp PAUSE_BREAK   &kp HOME &kp PG_DN   &kp PG_UP &kp END   &trans   &kp RSHFT
-                          &trans    &mo 5    &trans            &trans   &trans      &trans
+&kp K_PWR &kp F1  &kp F2  &kp F3    &kp F4   &kp F5            &trans   &trans    &trans    &trans    &mkp MB1 &mkp MB2
+&trans    &kp F6  &kp F7  &kp F8    &kp F9   &kp F10           &kp LEFT &kp DOWN  &kp UP    &kp RIGHT &mkp MB3 &trans
+&kp LSHFT &kp F11 &kp F12 &kp PSCRN &kp SLCK &kp PAUSE_BREAK   &kp HOME &kp PG_DN &kp PG_UP &kp END   &trans   &trans
+                          &trans    &mo 5    &trans            &trans   &trans    &trans
             >;
         };
 
